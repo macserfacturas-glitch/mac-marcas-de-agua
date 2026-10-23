@@ -93,8 +93,8 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;bor
 <label>Color del texto (ej. #777777)</label><input name="color" value="#777777" pattern="#[0-9a-fA-F]{6}" required>
 <label>Transparencia (0.05 a 1.00)</label><input name="opacity" type="number" min="0.05" max="1" step="0.05" value="0.22" required>
 <label>Tamaño</label><input name="size" type="number" min="10" max="180" value="42" required>
-<label>InclinaciÃ³n en grados (-90 a 90)</label><input name="rotation" type="number" min="-90" max="90" value="35" required>
-<label>PosiciÃ³n</label><select name="position"><option value="center">Centro</option><option value="diagonal">Diagonal al centro</option><option value="top">Parte superior</option><option value="bottom">Parte inferior</option><option value="pattern">Logos pequeÃ±os en toda la hoja</option></select>
+<label>Inclinacion en grados (-90 a 90)</label><input name="rotation" type="number" min="-90" max="90" value="35" required>
+<label>PosiciÃ³n</label><select name="position"><option value="center">Centro</option><option value="diagonal">Diagonal al centro</option><option value="top">Parte superior</option><option value="bottom">Parte inferior</option><option value="pattern">Logos pequeños en toda la hoja</option></select>
 <button type="submit">Guardar marca</button>
 </form></section>
 <section class="card"><h2>2. Aplicar a un PDF</h2>
@@ -108,8 +108,8 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;bor
 <section class="card" style="margin-top:18px"><h2>3. Biblioteca de marcas guardadas</h2>
 {% if watermarks %}<table><thead><tr><th>Nombre</th><th>Tipo</th><th>Vista / texto</th><th>Creada por</th><th></th></tr></thead><tbody>
 {% for w in watermarks %}<tr><td>{{w.name}}</td><td>{{'Texto' if w.kind=='text' else 'Logotipo'}}</td><td>{{w.text_value if w.kind=='text' else w.logo_filename}}</td><td>{{w.created_by}}</td><td><form method="post" action="{{url_for('delete_watermark', watermark_id=w.id)}}" onsubmit="return confirm('.¿Eliminar esta marca guardada?')"><button class="danger" type="submit">Eliminar</button></form></td></tr>{% endfor %}
-</tbody></table>{% else %}<p>AÃºn no hay marcas guardadas. Crea la primera en el formulario.</p>{% endif %}
-<p class="muted">La biblioteca se conserva en la base de datos local. Para que varios empleados compartan la misma biblioteca, el programa debe ejecutarse en un servidor comÃºn.</p></section>
+</tbody></table>{% else %}<p>Aun no hay marcas guardadas. Crea la primera en el formulario.</p>{% endif %}
+<p class="muted">La biblioteca se conserva en la base de datos local. Para que varios empleados compartan la misma biblioteca, el programa debe ejecutarse en un servidor comun.</p></section>
 {% if role == 'admin' %}<section class="card" style="margin-top:18px"><h2>AdministraciÃ³n de usuarios</h2><p class="muted">Crea accesos para empleados. Comparte las credenciales de forma segura.</p>
 <form method="post" action="{{url_for('create_user')}}"><div class="grid"><div><label>Nuevo usuario</label><input name="username" required minlength="3"></div><div><label>Contraseña inicial</label><input name="password" type="password" required minlength="10"></div></div><button type="submit">Crear usuario</button></form>
 <h3>Usuarios registrados</h3><table><tr><th>Usuario</th><th>Rol</th></tr>{% for u in users %}<tr><td>{{u.username}}</td><td>{{u.role}}</td></tr>{% endfor %}</table></section>{% endif %}
@@ -195,7 +195,7 @@ def create_watermark():
                 im.verify()
         except Exception:
             os.remove(os.path.join(UPLOAD_DIR, logo_filename))
-            flash("La imagen no es vÃ¡lida.")
+            flash("La imagen no es valida.")
             return redirect(url_for("home"))
     try:
         color = request.form.get("color", "#777777")
@@ -205,7 +205,7 @@ def create_watermark():
         size = max(10, min(180, float(request.form.get("size", "42"))))
         rotation = max(-90, min(90, float(request.form.get("rotation", "35"))))
     except ValueError:
-        flash("Revisa color, transparencia, tamaño e inclinaciÃ³n.")
+        flash("Revisa color, transparencia, tamaño e inclinacion.")
         return redirect(url_for("home"))
     position = request.form.get("position", "center")
     if position not in ("center", "diagonal", "top", "bottom", "pattern"):
@@ -245,7 +245,7 @@ def make_overlay(width, height, wm):
         logo_path = os.path.join(UPLOAD_DIR, wm["logo_filename"] or "")
         if not os.path.isfile(logo_path):
             c.restoreState(); c.save(); packet.seek(0); return packet
-        # PatrÃ³n repetido de logos pequeÃ±os que cubre toda la pÃ¡gina.
+        # Patron repetido de logos pequeños que cubre toda la pÃ¡gina.
         logo_w = max(24, float(wm["size"]))
         try:
             with Image.open(logo_path) as im:
@@ -303,10 +303,10 @@ def apply_watermark():
     try:
         reader = PdfReader(f.stream, strict=False)
         if reader.is_encrypted:
-            flash("El PDF estÃ¡ protegido con contraseña. DesbloquÃ©alo antes de cargarlo.")
+            flash("El PDF esta protegido con contraseña. Desbloquealo antes de cargarlo.")
             return redirect(url_for("home"))
         if len(reader.pages) > 500:
-            flash("Por seguridad, el lÃ­mite es de 500 paginas por documento.")
+            flash("Por seguridad, el limite es de 500 paginas por documento.")
             return redirect(url_for("home"))
         wm_id = int(request.form.get("watermark_id", "0"))
         with db() as con:
@@ -333,7 +333,7 @@ def apply_watermark():
         out_name = os.path.splitext(original)[0] + "_con_marca_MAC.pdf"
         return send_file(output, as_attachment=True, download_name=out_name, mimetype="application/pdf")
     except Exception:
-        flash("No se pudo procesar el PDF. Comprueba que el archivo no estÃ© daÃ±ado y vuelve a intentarlo.")
+        flash("No se pudo procesar el PDF. Comprueba que el archivo no estÃ© dañado y vuelve a intentarlo.")
         return redirect(url_for("home"))
 
 @app.route("/users/create", methods=["POST"])
@@ -356,11 +356,11 @@ def create_user():
 
 @app.errorhandler(403)
 def forbidden(e):
-    return "No tienes permiso para realizar esta acciÃ³n.", 403
+    return "No tienes permiso para realizar esta accion.", 403
 
 @app.errorhandler(413)
 def too_large(e):
-    return "El archivo supera el lÃ­mite de 25 MB.", 413
+    return "El archivo supera el li­mite de 25 MB.", 413
 
 if __name__ == "__main__":
     # Local use only. For internet deployment, use a production server and HTTPS.
