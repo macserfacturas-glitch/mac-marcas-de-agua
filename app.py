@@ -61,9 +61,9 @@ body{font-family:Arial;background:#eef2f7;margin:0;display:grid;min-height:100vh
 .card{background:white;padding:30px;border-radius:14px;box-shadow:0 8px 28px #0001;width:min(360px,85vw)}
 h1{color:#17365d;font-size:24px;margin-top:0}label{display:block;margin:14px 0 5px}input{box-sizing:border-box;width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:7px}
 button{margin-top:18px;width:100%;padding:12px;border:0;border-radius:7px;background:#17365d;color:white;font-weight:bold;cursor:pointer}.muted{color:#64748b;font-size:13px}
-</style></head><body><div class="card"><h1>Marcas de agua</h1><p>MAC Servicios Ambientales Â· Control de marcas de agua para documentos PDF.</p>
+</style></head><body><div class="card"><h1>Marcas de agua</h1><p>MAC Servicios Ambientales · Control de marcas de agua para documentos PDF.</p>
 {% with messages = get_flashed_messages() %}{% for m in messages %}<p style="color:#b91c1c">{{m}}</p>{% endfor %}{% endwith %}
-<form method="post"><label>Usuario</label><input name="username" required autocomplete="username"><label>ContraseÃ±a</label><input name="password" type="password" required autocomplete="current-password"><button>Iniciar sesiÃ³n</button></form>
+<form method="post"><label>Usuario</label><input name="username" required autocomplete="username"><label>Contraseña</label><input name="password" type="password" required autocomplete="current-password"><button>Iniciar sesion</button></form>
 <p class="muted">Acceso inicial: MAC / marcasdeagua.</p></div></body></html>
 """
 
@@ -80,7 +80,7 @@ input,select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;
 table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;border-bottom:1px solid #e2e8f0;font-size:14px}th{background:#f8fafc}
 .inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.inline input[type=checkbox]{width:auto}
 </style></head><body>
-<header><div><h1>Marcas de agua</h1><div>MAC Servicios Ambientales Â· Control de marcas de agua</div></div><div>SesiÃ³n: <b>{{user}}</b> ({{role}}) &nbsp; <a class="btn secondary" href="{{url_for('logout')}}">Salir</a></div></header>
+<header><div><h1>Marcas de agua</h1><div>MAC Servicios Ambientales · Control de marcas de agua</div></div><div>Sesion: <b>{{user}}</b> ({{role}}) &nbsp; <a class="btn secondary" href="{{url_for('logout')}}">Salir</a></div></header>
 <main>
 {% with messages = get_flashed_messages() %}{% for m in messages %}<div class="message">{{m}}</div>{% endfor %}{% endwith %}
 <div class="grid">
@@ -92,7 +92,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;bor
 <div id="logo-fields" style="display:none"><label>Archivo de imagen (PNG, JPG o WEBP)</label><input type="file" name="logo" accept=".png,.jpg,.jpeg,.webp"></div>
 <label>Color del texto (ej. #777777)</label><input name="color" value="#777777" pattern="#[0-9a-fA-F]{6}" required>
 <label>Transparencia (0.05 a 1.00)</label><input name="opacity" type="number" min="0.05" max="1" step="0.05" value="0.22" required>
-<label>TamaÃ±o</label><input name="size" type="number" min="10" max="180" value="42" required>
+<label>Tamaño</label><input name="size" type="number" min="10" max="180" value="42" required>
 <label>InclinaciÃ³n en grados (-90 a 90)</label><input name="rotation" type="number" min="-90" max="90" value="35" required>
 <label>PosiciÃ³n</label><select name="position"><option value="center">Centro</option><option value="diagonal">Diagonal al centro</option><option value="top">Parte superior</option><option value="bottom">Parte inferior</option><option value="pattern">Logos pequeÃ±os en toda la hoja</option></select>
 <button type="submit">Guardar marca</button>
@@ -100,18 +100,18 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;bor
 <section class="card"><h2>2. Aplicar a un PDF</h2>
 <form method="post" action="{{url_for('apply_watermark')}}" enctype="multipart/form-data">
 <label>Selecciona el PDF</label><input type="file" name="pdf" accept=".pdf,application/pdf" required>
-<label>Marca guardada</label><select name="watermark_id" required>{% for w in watermarks %}<option value="{{w.id}}">{{w.name}} â€” {{'Texto' if w.kind=='text' else 'Logotipo'}}</option>{% endfor %}</select>
-<label>Aplicar a</label><select name="pages"><option value="all">Todas las pÃ¡ginas</option><option value="first">Solo primera pÃ¡gina</option></select>
+<label>Marca guardada</label><select name="watermark_id" required>{% for w in watermarks %}<option value="{{w.id}}">{{w.name}} .€” {{'Texto' if w.kind=='text' else 'Logotipo'}}</option>{% endfor %}</select>
+<label>Aplicar a</label><select name="pages"><option value="all">Todas las paginas</option><option value="first">Solo primera pÃ¡gina</option></select>
 <button type="submit" {% if not watermarks %}disabled{% endif %}>Generar PDF con marca</button>
 <p class="muted">El archivo original no se modifica. El PDF resultante se descarga al terminar.</p></form>
 </section></div>
 <section class="card" style="margin-top:18px"><h2>3. Biblioteca de marcas guardadas</h2>
 {% if watermarks %}<table><thead><tr><th>Nombre</th><th>Tipo</th><th>Vista / texto</th><th>Creada por</th><th></th></tr></thead><tbody>
-{% for w in watermarks %}<tr><td>{{w.name}}</td><td>{{'Texto' if w.kind=='text' else 'Logotipo'}}</td><td>{{w.text_value if w.kind=='text' else w.logo_filename}}</td><td>{{w.created_by}}</td><td><form method="post" action="{{url_for('delete_watermark', watermark_id=w.id)}}" onsubmit="return confirm('Â¿Eliminar esta marca guardada?')"><button class="danger" type="submit">Eliminar</button></form></td></tr>{% endfor %}
+{% for w in watermarks %}<tr><td>{{w.name}}</td><td>{{'Texto' if w.kind=='text' else 'Logotipo'}}</td><td>{{w.text_value if w.kind=='text' else w.logo_filename}}</td><td>{{w.created_by}}</td><td><form method="post" action="{{url_for('delete_watermark', watermark_id=w.id)}}" onsubmit="return confirm('.¿Eliminar esta marca guardada?')"><button class="danger" type="submit">Eliminar</button></form></td></tr>{% endfor %}
 </tbody></table>{% else %}<p>AÃºn no hay marcas guardadas. Crea la primera en el formulario.</p>{% endif %}
 <p class="muted">La biblioteca se conserva en la base de datos local. Para que varios empleados compartan la misma biblioteca, el programa debe ejecutarse en un servidor comÃºn.</p></section>
 {% if role == 'admin' %}<section class="card" style="margin-top:18px"><h2>AdministraciÃ³n de usuarios</h2><p class="muted">Crea accesos para empleados. Comparte las credenciales de forma segura.</p>
-<form method="post" action="{{url_for('create_user')}}"><div class="grid"><div><label>Nuevo usuario</label><input name="username" required minlength="3"></div><div><label>ContraseÃ±a inicial</label><input name="password" type="password" required minlength="10"></div></div><button type="submit">Crear usuario</button></form>
+<form method="post" action="{{url_for('create_user')}}"><div class="grid"><div><label>Nuevo usuario</label><input name="username" required minlength="3"></div><div><label>Contraseña inicial</label><input name="password" type="password" required minlength="10"></div></div><button type="submit">Crear usuario</button></form>
 <h3>Usuarios registrados</h3><table><tr><th>Usuario</th><th>Rol</th></tr>{% for u in users %}<tr><td>{{u.username}}</td><td>{{u.role}}</td></tr>{% endfor %}</table></section>{% endif %}
 </main><script>function toggleKind(){let k=document.getElementById('kind').value;document.getElementById('text-fields').style.display=k==='text'?'block':'none';document.getElementById('logo-fields').style.display=k==='logo'?'block':'none';}</script></body></html>
 """
@@ -145,7 +145,7 @@ def login():
             session.clear()
             session["user_id"] = user["id"]
             return redirect(url_for("home"))
-        flash("Usuario o contraseÃ±a incorrectos.")
+        flash("Usuario o contraseña incorrectos.")
     return render_template_string(LOGIN_PAGE)
 
 @app.route("/logout")
@@ -205,7 +205,7 @@ def create_watermark():
         size = max(10, min(180, float(request.form.get("size", "42"))))
         rotation = max(-90, min(90, float(request.form.get("rotation", "35"))))
     except ValueError:
-        flash("Revisa color, transparencia, tamaÃ±o e inclinaciÃ³n.")
+        flash("Revisa color, transparencia, tamaño e inclinaciÃ³n.")
         return redirect(url_for("home"))
     position = request.form.get("position", "center")
     if position not in ("center", "diagonal", "top", "bottom", "pattern"):
@@ -298,15 +298,15 @@ def make_overlay(width, height, wm):
 def apply_watermark():
     f = request.files.get("pdf")
     if not f or not f.filename or not f.filename.lower().endswith(".pdf"):
-        flash("Selecciona un archivo PDF vÃ¡lido.")
+        flash("Selecciona un archivo PDF valido.")
         return redirect(url_for("home"))
     try:
         reader = PdfReader(f.stream, strict=False)
         if reader.is_encrypted:
-            flash("El PDF estÃ¡ protegido con contraseÃ±a. DesbloquÃ©alo antes de cargarlo.")
+            flash("El PDF estÃ¡ protegido con contraseña. DesbloquÃ©alo antes de cargarlo.")
             return redirect(url_for("home"))
         if len(reader.pages) > 500:
-            flash("Por seguridad, el lÃ­mite es de 500 pÃ¡ginas por documento.")
+            flash("Por seguridad, el lÃ­mite es de 500 paginas por documento.")
             return redirect(url_for("home"))
         wm_id = int(request.form.get("watermark_id", "0"))
         with db() as con:
@@ -343,7 +343,7 @@ def create_user():
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
     if len(username) < 3 or len(password) < 10:
-        flash("El usuario debe tener al menos 3 caracteres y la contraseÃ±a 10.")
+        flash("El usuario debe tener al menos 3 caracteres y la contraseña 10.")
         return redirect(url_for("home"))
     try:
         with db() as con:
