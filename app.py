@@ -101,7 +101,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;bor
 <form method="post" action="{{url_for('apply_watermark')}}" enctype="multipart/form-data">
 <label>Selecciona el PDF</label><input type="file" name="pdf" accept=".pdf,application/pdf" required>
 <label>Marca guardada</label><select name="watermark_id" required>{% for w in watermarks %}<option value="{{w.id}}">{{w.name}} .€” {{'Texto' if w.kind=='text' else 'Logotipo'}}</option>{% endfor %}</select>
-<label>Aplicar a</label><select name="pages"><option value="all">Todas las paginas</option><option value="first">Solo primera pÃ¡gina</option></select>
+<label>Aplicar a</label><select name="pages"><option value="all">Todas las paginas</option><option value="first">Solo primera pagina</option></select>
 <button type="submit" {% if not watermarks %}disabled{% endif %}>Generar PDF con marca</button>
 <p class="muted">El archivo original no se modifica. El PDF resultante se descarga al terminar.</p></form>
 </section></div>
@@ -245,7 +245,7 @@ def make_overlay(width, height, wm):
         logo_path = os.path.join(UPLOAD_DIR, wm["logo_filename"] or "")
         if not os.path.isfile(logo_path):
             c.restoreState(); c.save(); packet.seek(0); return packet
-        # Patron repetido de logos pequeños que cubre toda la pÃ¡gina.
+        # Patron repetido de logos pequeños que cubre toda la pagina.
         logo_w = max(24, float(wm["size"]))
         try:
             with Image.open(logo_path) as im:
