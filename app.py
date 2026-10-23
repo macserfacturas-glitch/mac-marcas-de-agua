@@ -94,7 +94,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;bor
 <label>Transparencia (0.05 a 1.00)</label><input name="opacity" type="number" min="0.05" max="1" step="0.05" value="0.22" required>
 <label>Tamaño</label><input name="size" type="number" min="10" max="180" value="42" required>
 <label>Inclinacion en grados (-90 a 90)</label><input name="rotation" type="number" min="-90" max="90" value="35" required>
-<label>PosiciÃ³n</label><select name="position"><option value="center">Centro</option><option value="diagonal">Diagonal al centro</option><option value="top">Parte superior</option><option value="bottom">Parte inferior</option><option value="pattern">Logos pequeños en toda la hoja</option></select>
+<label>Posicion</label><select name="position"><option value="center">Centro</option><option value="diagonal">Diagonal al centro</option><option value="top">Parte superior</option><option value="bottom">Parte inferior</option><option value="pattern">Logos pequeños en toda la hoja</option></select>
 <button type="submit">Guardar marca</button>
 </form></section>
 <section class="card"><h2>2. Aplicar a un PDF</h2>
